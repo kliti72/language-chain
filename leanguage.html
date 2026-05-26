@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alfabeti — Catena Linguistica</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0b0b0b;
+    --surface: #111;
+    --border: #222;
+    --text: #e8e8e8;
+    --muted: #555;
+    --accent: #c0c0c0;
+  }
+
+  body {
+    background: var(--bg);
+    background-image: linear-gradient(135deg, #0b0b0b 0%, #161616 25%, #242424 50%, #3a3a3a 70%, #606060 88%, #909090 100%);
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    min-height: 100vh;
+    padding: 48px 24px;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, #fff, #888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 56px;
+  }
+
+  .chain {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 56px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 2px;
+  }
+
+  .chain-item { color: var(--accent); }
+  .chain-arrow { color: #333; }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    padding: 28px;
+    transition: background .2s;
+  }
+
+  .card:hover { background: rgba(255,255,255,0.05); }
+
+  .card-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .flag { font-size: 20px; }
+
+  .lang-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #fff;
+  }
+
+  .lang-family {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-left: auto;
+  }
+
+  .letters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .letter {
+    font-size: 13px;
+    color: var(--accent);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid #1e1e1e;
+    padding: 3px 7px;
+    border-radius: 2px;
+    transition: all .15s;
+    cursor: default;
+  }
+
+  .letter:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    border-color: #444;
+  }
+
+  .note {
+    font-size: 10px;
+    color: #3a3a3a;
+    line-height: 1.6;
+    border-top: 1px solid var(--border);
+    padding-top: 12px;
+    margin-top: 4px;
+  }
+
+  footer {
+    margin-top: 64px;
+    font-size: 10px;
+    color: #2a2a2a;
+    letter-spacing: 2px;
+    text-align: center;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<h1>Alfabeti</h1>
+<p class="subtitle">Catena linguistica — partendo dall'italiano</p>
+
+<div class="chain">
+  <span class="chain-item">🇮🇹 Italiano</span>
+  <span class="chain-arrow">→</span>
+  <span class="chain-item">🇪🇸 Spagnolo</span>
+  <span class="chain-arrow">→</span>
+  <span class="chain-item">🇵🇹 Portoghese</span>
+  <span class="chain-arrow">→</span>
+  <span class="chain-item">🇫🇷 Francese</span>
+  <span class="chain-arrow">→</span>
+  <span class="chain-item">🇩🇪 Tedesco</span>
+  <span class="chain-arrow">→</span>
+  <span class="chain-item">🇳🇱 Olandese</span>
+  <span class="chain-arrow">→</span>
+  <span class="chain-item">🇸🇪 Svedese</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<footer>hover sulle lettere · tutti gli alfabeti sono latini con varianti locali</footer>
+
+<script>
+const langs = [
+  {
+    flag: "🇮🇹", name: "Italiano", family: "Romanza",
+    letters: ["A","B","C","D","E","F","G","H","I","L","M","N","O","P","Q","R","S","T","U","V","Z"],
+    note: "21 lettere. J K W X Y esistono ma solo in parole straniere."
+  },
+  {
+    flag: "🇪🇸", name: "Spagnolo", family: "Romanza",
+    letters: ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+    note: "27 lettere. La Ñ è il carattere iconico — suono 'gn' come in italiano."
+  },
+  {
+    flag: "🇵🇹", name: "Portoghese", family: "Romanza",
+    letters: ["A","Á","Â","Ã","À","B","C","Ç","D","E","É","Ê","F","G","H","I","Í","J","K","L","M","N","O","Ó","Ô","Õ","P","Q","R","S","T","U","Ú","V","W","X","Y","Z"],
+    note: "26 lettere base + molti diacritici. Le vocali nasali (ã, õ) sono uniche."
+  },
+  {
+    flag: "🇫🇷", name: "Francese", family: "Romanza",
+    letters: ["A","À","Â","Æ","B","C","Ç","D","E","É","È","Ê","Ë","F","G","H","I","Î","Ï","J","K","L","M","N","O","Ô","Œ","P","Q","R","S","T","U","Ù","Û","Ü","V","W","X","Y","Ÿ","Z"],
+    note: "26 base + accenti. Metà lettere non si pronunciano — benvenuti nell'inferno ortografico. 😄"
+  },
+  {
+    flag: "🇩🇪", name: "Tedesco", family: "Germanica",
+    letters: ["A","Ä","B","C","D","E","F","G","H","I","J","K","L","M","N","O","Ö","P","Q","R","S","ß","T","U","Ü","V","W","X","Y","Z"],
+    note: "26 lettere + Ä Ö Ü (umlaut) + ß (Eszett = doppia s). Il verbo va in fondo."
+  },
+  {
+    flag: "🇳🇱", name: "Olandese", family: "Germanica",
+    letters: ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"],
+    note: "26 lettere identiche al latino. La difficoltà è nella pronuncia dei digrammi: ij, oe, ui, eu."
+  },
+  {
+    flag: "🇸🇪", name: "Svedese", family: "Germanica",
+    letters: ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","Å","Ä","Ö"],
+    note: "29 lettere. Å Ä Ö vanno alla fine dell'alfabeto — tre caratteri unici scandinavi."
+  }
+];
+
+const grid = document.getElementById("grid");
+
+langs.forEach(l => {
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML = `
+    <div class="card-header">
+      <span class="flag">${l.flag}</span>
+      <span class="lang-name">${l.name}</span>
+      <span class="lang-family">${l.family}</span>
+    </div>
+    <div class="letters">${l.letters.map(c => `<span class="letter">${c}</span>`).join("")}</div>
+    <p class="note">${l.note}</p>
+  `;
+  grid.appendChild(card);
+});
+</script>
+</body>
+</html>
